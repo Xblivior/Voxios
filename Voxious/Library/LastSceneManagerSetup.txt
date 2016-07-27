@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Main Menu/MainMenu.unity
+- path: Assets/Levels/Desert Level/Desert.unity
   isLoaded: 1
   isActive: 1
