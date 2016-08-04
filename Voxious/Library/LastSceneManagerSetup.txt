@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Levels/City Level/City.unity
+- path: Assets/Overworld/Overworld.unity
   isLoaded: 1
   isActive: 1
