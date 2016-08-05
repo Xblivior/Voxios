@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Overworld/Overworld.unity
+- path: Assets/Levels/Forest Level/Forest.unity
   isLoaded: 1
   isActive: 1
