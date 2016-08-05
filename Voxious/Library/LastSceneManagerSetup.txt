@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Overworld/Overworld.unity
+- path: Assets/Levels/Testing/TestingScene.unity
   isLoaded: 1
   isActive: 1

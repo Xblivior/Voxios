@@ -3,6 +3,12 @@ using System.Collections;
 
 public class PlayerBrain : MonoBehaviour 
 {
+	//Stat Ref
+
+	public static GameObject playerBrain;
+	public GameObject camAim;
+	private Rigidbody rb;
+	private GameObject c;
 
 	//stats
 	public float maxHP = 100f;
@@ -13,11 +19,20 @@ public class PlayerBrain : MonoBehaviour
 	public float currentShield;
 	float currentHeat;
 
+	public float speed;
+	public float strafeSpeed;
+	public float rotSpeed;
+
 	//heal drone ability veriables
 	public GameObject healDrone;
 	public Transform droneSpawn;
 	float healTimer;
 
+	void Awake () {
+		playerBrain = this.gameObject;
+		rb = GetComponent<Rigidbody> ();
+		c = Camera.main.gameObject;
+	}
 
 	// Use this for initialization
 	void Start () 
@@ -25,11 +40,15 @@ public class PlayerBrain : MonoBehaviour
 		currentHP = maxHP;
 		currentShield = maxShield;
 		currentHeat = 0f;
+
+
+		Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
+
 		//heal drone Cooldown timer
 		healTimer -= Time.deltaTime;
 
@@ -47,12 +66,33 @@ public class PlayerBrain : MonoBehaviour
 			if (healTimer == 0f)
 			{
 				//use heal drone ability
-				HealdDrone();
+				HealDrone();
 			}
 		}
 	}
 
-	void HealdDrone()
+	void FixedUpdate () {
+		PlayerMovement ();
+		PlayerRotation ();
+		CameraControl ();
+	}
+
+	private void PlayerMovement () 
+	{
+		rb.MovePosition (transform.position + (transform.forward * Input.GetAxis("Vertical")  * speed * Time.deltaTime) + (transform.right * Input.GetAxis ("Horizontal")) * strafeSpeed * Time.deltaTime);
+
+	}
+
+	private void PlayerRotation () {
+		transform.Rotate (Vector3.up, Input.GetAxis ("Mouse X") * rotSpeed * Time.deltaTime);
+	}
+
+	private void CameraControl ()
+	{
+		c.transform.LookAt (camAim.transform.position);
+	}
+
+	void HealDrone()
 	{
 		//spawn Heal drone
 		Instantiate(healDrone, droneSpawn.transform.position, droneSpawn.transform.rotation);
