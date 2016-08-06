@@ -1,8 +1,4 @@
 sceneSetups:
-<<<<<<< HEAD
 - path: Assets/Levels/Forest Level/Forest.unity
-=======
-- path: Assets/Levels/Testing/TestingScene.unity
->>>>>>> origin/master
   isLoaded: 1
   isActive: 1
