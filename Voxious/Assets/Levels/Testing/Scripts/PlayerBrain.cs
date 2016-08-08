@@ -4,7 +4,6 @@ using System.Collections;
 public class PlayerBrain : MonoBehaviour 
 {
 	//Stat Ref
-
 	public static GameObject playerBrain;
 	public GameObject camAim;
 	private Rigidbody rb;
@@ -19,6 +18,17 @@ public class PlayerBrain : MonoBehaviour
 	public float currentShield;
 	float currentHeat;
 
+	//gun references
+	public GameObject gunPivot;
+	public GameObject aRModel;
+
+	int currentGunNumber;
+	GameObject currentGunObj;
+
+	public GameObject bullet;
+	public Transform bulletSpawn;
+
+	//speed references
 	public float speed;
 	public float strafeSpeed;
 	public float rotSpeed;
@@ -28,7 +38,8 @@ public class PlayerBrain : MonoBehaviour
 	public Transform droneSpawn;
 	float healTimer;
 
-	void Awake () {
+	void Awake () 
+	{
 		playerBrain = this.gameObject;
 		rb = GetComponent<Rigidbody> ();
 		c = Camera.main.gameObject;
@@ -41,8 +52,11 @@ public class PlayerBrain : MonoBehaviour
 		currentShield = maxShield;
 		currentHeat = 0f;
 
-
+		//lock the mouse to the middle and make it disappear from view
 		Cursor.lockState = CursorLockMode.Locked;
+
+		//note: just for now
+		currentGunObj = aRModel;
 	}
 
 	// Update is called once per frame
@@ -69,9 +83,17 @@ public class PlayerBrain : MonoBehaviour
 				HealDrone();
 			}
 		}
+
+		if (Input.GetMouseButtonDown(0))
+		{
+			Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
+		}
+
+
 	}
 
-	void FixedUpdate () {
+	void FixedUpdate () 
+	{
 		PlayerMovement ();
 		PlayerRotation ();
 		CameraControl ();
@@ -83,13 +105,20 @@ public class PlayerBrain : MonoBehaviour
 
 	}
 
-	private void PlayerRotation () {
+	private void PlayerRotation () 
+	{
+		float rotationY = 0f;
+		rotationY += Input.GetAxis ("Mouse Y") * rotSpeed * Time.deltaTime;
+		rotationY = Mathf.Clamp(rotationY, -12f, 10f);
+
 		transform.Rotate (Vector3.up, Input.GetAxis ("Mouse X") * rotSpeed * Time.deltaTime);
+
 	}
 
 	private void CameraControl ()
 	{
 		c.transform.LookAt (camAim.transform.position);
+		currentGunObj.transform.LookAt (camAim.transform.position);
 	}
 
 	void HealDrone()
@@ -99,6 +128,16 @@ public class PlayerBrain : MonoBehaviour
 
 		//start cooldown
 		healTimer = 10f;
+	}
+
+	void Overshield()
+	{
+		
+	}
+
+	void Overcharge()
+	{
+		
 	}
 
 	public void TakeDamage(float damage)
