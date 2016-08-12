@@ -1,22 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BulletController : MonoBehaviour 
+public class BulletController : PlayerShotController 
 {
-	public float speed = 5f;
-	//self destruct timer
-	float lifeTime = 1f;
-
-	// Use this for initialization
-	void Start () 
-	{	
-		//destroy bullet after 2 secs
-		Destroy (gameObject, lifeTime);
-	}
-	
-	// Update is called once per frame
-	void Update () 
+	void Awake()
 	{
-		transform.Translate (Vector3.forward * speed * Time.deltaTime);
+		damage = 5f;
+	}
+
+	public void OnTriggerEnter(Collider other)
+	{
+		
+		if (other.tag == "Enemy")
+		{
+			
+			//send damage message
+			other.gameObject.SendMessage ("TakeDamage", damage);
+
+			//destroy itself
+			Destroy (gameObject);
+		}
 	}
 }

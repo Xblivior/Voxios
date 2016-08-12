@@ -13,10 +13,11 @@ public class PlayerBrain : MonoBehaviour
 	public float maxHP = 100f;
 	public float maxShield = 100f;
 	public float maxHeat = 100f;
+	public float heat;
 
 	public float currentHP;
 	public float currentShield;
-	float currentHeat;
+	public float currentHeat;
 
 	//gun references
 	public GameObject gunPivot;
@@ -25,7 +26,7 @@ public class PlayerBrain : MonoBehaviour
 	int currentGunNumber;
 	GameObject currentGunObj;
 
-	public GameObject bullet;
+	public GameObject bullet, bulletClone;
 	public Transform bulletSpawn;
 
 	//speed references
@@ -37,6 +38,11 @@ public class PlayerBrain : MonoBehaviour
 	public GameObject healDrone;
 	public Transform droneSpawn;
 	float healTimer;
+
+	public enum gunLocker {assaultRifle, submachineGun, magnum};
+
+	public gunLocker equipedGun;
+
 
 	void Awake () 
 	{
@@ -86,7 +92,14 @@ public class PlayerBrain : MonoBehaviour
 
 		if (Input.GetMouseButtonDown(0))
 		{
-			Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
+			//NOTE: move to gun swap function
+			if (equipedGun == gunLocker.assaultRifle) 
+			{
+				heat = 1f;
+				HeatGain (heat);
+			}
+
+			bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
 		}
 
 
@@ -140,6 +153,11 @@ public class PlayerBrain : MonoBehaviour
 		
 	}
 
+	public void SwapWeapon()
+	{
+		
+	}
+
 	public void TakeDamage(float damage)
 	{
 		//if player has shield
@@ -168,7 +186,7 @@ public class PlayerBrain : MonoBehaviour
 
 	public void HeatGain(float heat)
 	{
-		currentHeat += heat;
 
+		currentHeat += heat;
 	}
 }
