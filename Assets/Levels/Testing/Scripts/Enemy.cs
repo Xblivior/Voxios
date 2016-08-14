@@ -6,8 +6,8 @@ public class Enemy : MonoBehaviour
 	//HP and Shield references
 	public float maxHP = 50f;
 	public float maxShield = 25f;
-	float currentHP;
-	float currentShield;
+	public float currentHP;
+	public float currentShield;
 
 	//shooting references
 	public GameObject shot;
