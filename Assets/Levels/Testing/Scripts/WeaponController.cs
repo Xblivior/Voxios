@@ -7,7 +7,6 @@ public class WeaponController : MonoBehaviour
 	public int currentWeapon;
 	int numWeapons; 
 
-
 	// Use this for initialization
 	void Start () 
 	{
@@ -20,7 +19,7 @@ public class WeaponController : MonoBehaviour
 		if (Input.GetAxis("Mouse ScrollWheel") < 0) 
 		{
 
-			if (currentWeapon + 1 <= numWeapons)
+			if (currentWeapon + 1 < numWeapons)
 			{
 				//change this so it goes 1 over
 				currentWeapon++;
@@ -44,7 +43,7 @@ public class WeaponController : MonoBehaviour
 
 			else 
 			{
-				currentWeapon = numWeapons;
+				currentWeapon = numWeapons - 1;
 			}
 
 			SelectWeapon(currentWeapon);
@@ -74,6 +73,8 @@ public class WeaponController : MonoBehaviour
 			{ 
 				weapons[i].gameObject.SetActive(false);
 			}
+
+			//credit: nastasache, http://answers.unity3d.com/questions/589666/how-to-switch-weaponsc.html
 		}
 	}
 
@@ -93,3 +94,7 @@ public class WeaponController : MonoBehaviour
 	}
 
 }
+
+
+//NOTE: Script for Weapon Swap using scrollwheel was made by moinchdog on
+// http://answers.unity3d.com/questions/64076/scroll-wheel-get-weapon.html

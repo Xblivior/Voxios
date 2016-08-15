@@ -21,6 +21,9 @@ public class PlayerBrain : MonoBehaviour
 	public float currentHeat;
 	public float currentOvershield;
 
+	bool isOverheated = false;
+	bool isOvershielded = false;
+
 	//gun references
 	public enum gunLocker {assaultRifle, submachineGun, magnum};
 	public gunLocker equipedGun;
@@ -42,8 +45,10 @@ public class PlayerBrain : MonoBehaviour
 	//ability veriables
 	public GameObject healDrone;
 	public Transform droneSpawn;
-	float healTimer;
-	float overshieldTimer;
+	float healCooldown;
+	float overshieldCooldown;
+	float overshieldTimer = 8;
+
 
 	void Awake () 
 	{
@@ -71,45 +76,49 @@ public class PlayerBrain : MonoBehaviour
 	{
 
 		//ability Cooldown timer
-		healTimer -= Time.deltaTime;
-		overshieldTimer -= Time.deltaTime;
+		healCooldown -= Time.deltaTime;
+		overshieldCooldown -= Time.deltaTime;
+
+		//if heat is >= 0
+		if (currentHeat >= 0)
+		{
+			//have it cooldown at 2 heat/sec
+			currentHeat -= 2 * Time.deltaTime;
+		}
 
 		//if timer gets below 0
-		if (healTimer <= 0f)
+		if (healCooldown <= 0f)
 		{
 			//make it 0
-			healTimer = 0f;
+			healCooldown = 0f;
 		}
 			
-		if (overshieldTimer <= 0f)
+		if (overshieldCooldown <= 0f)
 		{
 			//make it 0
-			overshieldTimer = 0f;
+			overshieldCooldown = 0f;
 		}
 
-		//if the player presses 1
-		if (Input.GetKeyDown(KeyCode.Alpha1))
+		if (isOvershielded == true)
 		{
-			//and the timer is 0
-			if (healTimer == 0f)
+			overshieldTimer -= Time.deltaTime;
+
+			if (overshieldTimer <= 0f)
 			{
-				//use heal drone ability
-				HealDrone();
+				currentOvershield = 0;
+				isOvershielded = false;
 			}
 		}
 
-		//if the player presses 2
-		if (Input.GetKeyDown(KeyCode.Alpha2))
+		//if currentheat is < 100
+		if (currentHeat < 100)
 		{
-			//and the timer is 0
-			if (overshieldTimer == 0f)
-			{
-				//use overshield ability
-				Overshield();
-			}
-		}
+			//overheat is false
+			isOverheated = false;
+		} 
 
-		if (Input.GetMouseButtonDown(0))
+		//shooting
+		if (Input.GetMouseButton(0) && isOverheated == false)
 		{
 			//NOTE: move to gun swap function
 			if (equipedGun == gunLocker.assaultRifle) 
@@ -120,6 +129,28 @@ public class PlayerBrain : MonoBehaviour
 
 			//instantiate the bullet as a clone so i can access its variables
 			bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
+		}
+
+		//if the player presses 1
+		if (Input.GetKeyDown(KeyCode.Alpha1))
+		{
+			//and the timer is 0
+			if (healCooldown == 0f)
+			{
+				//use heal drone ability
+				HealDrone();
+			}
+		}
+
+		//if the player presses 2
+		if (Input.GetKeyDown(KeyCode.Alpha2))
+		{
+			//and the timer is 0
+			if (overshieldCooldown == 0f)
+			{
+				//use overshield ability
+				Overshield();
+			}
 		}
 
 
@@ -164,7 +195,7 @@ public class PlayerBrain : MonoBehaviour
 		Instantiate(healDrone, droneSpawn.transform.position, droneSpawn.transform.rotation);
 
 		//start cooldown
-		healTimer = 10f;
+		healCooldown = 10f;
 	}
 
 	void Overshield()
@@ -172,8 +203,11 @@ public class PlayerBrain : MonoBehaviour
 		//add the overshield
 		currentOvershield = 100f;
 
+		//overshield is true
+		isOvershielded = true;
+
 		//start cooldown
-		overshieldTimer = 20f;
+		overshieldCooldown = 20f;
 	}
 
 	void Overcharge()
@@ -188,6 +222,20 @@ public class PlayerBrain : MonoBehaviour
 
 	public void TakeDamage(float damage)
 	{
+		//if player has overshield
+		if (currentOvershield > 0f)
+		{
+			//take overshield off
+			currentOvershield -= damage;
+		}
+
+		//else if there is no overshield
+		else if (currentOvershield <= 0f)
+		{
+			//take off shield
+			currentShield -= damage;
+		}
+
 		//if player has shield
 		if (currentShield > 0f)
 		{
@@ -214,8 +262,15 @@ public class PlayerBrain : MonoBehaviour
 
 	public void HeatGain(float heat)
 	{
-
+		//add heat
 		currentHeat += heat;
+
+		//if currentHeat gets to maxHeat
+		if (currentHeat >= maxHeat)
+		{
+			//player is overheated
+			isOverheated = true;
+		}
 	}
 }
 
