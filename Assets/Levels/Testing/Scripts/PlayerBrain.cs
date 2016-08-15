@@ -21,6 +21,7 @@ public class PlayerBrain : MonoBehaviour
 	public float currentHeat;
 	public float currentOvershield;
 
+	float overheatCooldown = 5f;
 	bool isOverheated = false;
 	bool isOvershielded = false;
 
@@ -34,8 +35,15 @@ public class PlayerBrain : MonoBehaviour
 	int currentGunNumber;
 	GameObject currentGunObj;
 
+	public WeaponController weaponController;
+	public GameObject[] weapons;
+	public int currentWeapon = 0;
+	int numWeapons; 
+
 	public GameObject bullet, bulletClone;
 	public Transform bulletSpawn;
+
+	bool canShoot = true;
 
 	//speed references
 	public float speed;
@@ -69,6 +77,10 @@ public class PlayerBrain : MonoBehaviour
 
 		//note: just for now
 		currentGunObj = aRModel;
+
+		numWeapons = weapons.Length; 
+		SelectWeapon (currentWeapon);
+
 	}
 
 	// Update is called once per frame
@@ -99,12 +111,16 @@ public class PlayerBrain : MonoBehaviour
 			overshieldCooldown = 0f;
 		}
 
+		//if player has overshield
 		if (isOvershielded == true)
 		{
+			//start overshield timer
 			overshieldTimer -= Time.deltaTime;
 
+			//if overshieldtimer hits 0
 			if (overshieldTimer <= 0f)
 			{
+				//over shield is 0 and isOvershielded is false
 				currentOvershield = 0;
 				isOvershielded = false;
 			}
@@ -117,18 +133,31 @@ public class PlayerBrain : MonoBehaviour
 			isOverheated = false;
 		} 
 
-		//shooting
-		if (Input.GetMouseButton(0) && isOverheated == false)
+		if (canShoot == false)
 		{
-			//NOTE: move to gun swap function
-			if (equipedGun == gunLocker.assaultRifle) 
-			{
-				heat = 1f;
-				HeatGain (heat);
-			}
+			overheatCooldown -= Time.deltaTime;
 
-			//instantiate the bullet as a clone so i can access its variables
-			bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
+			if (overheatCooldown <= 0f)
+			{
+				canShoot = true;
+				overheatCooldown = 5f;
+			}
+		}
+
+		//shooting
+		if (Input.GetMouseButton(0) && canShoot == true)
+		{
+//			//NOTE: move to gun swap function
+//			if (equipedGun == gunLocker.assaultRifle) 
+//			{
+//				heat = 1f;
+//				HeatGain (heat);
+//			}
+//
+//			//instantiate the bullet as a clone so i can access its variables
+//			bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
+
+			//weaponController.Shoot ();
 		}
 
 		//if the player presses 1
@@ -153,7 +182,8 @@ public class PlayerBrain : MonoBehaviour
 			}
 		}
 
-
+		//check for weaponswap
+		SwapWeapon ();
 	}
 
 	void FixedUpdate () 
@@ -217,7 +247,72 @@ public class PlayerBrain : MonoBehaviour
 
 	public void SwapWeapon()
 	{
-		
+		if (Input.GetAxis("Mouse ScrollWheel") < 0) 
+		{
+
+			if (currentWeapon + 1 < numWeapons)
+			{
+				//change this so it goes 1 over
+				currentWeapon++;
+			} 
+
+			else 
+			{
+				currentWeapon = 0;
+			}
+
+			SelectWeapon(currentWeapon);
+		} 
+
+		else if (Input.GetAxis("Mouse ScrollWheel") > 0) 
+		{
+			if (currentWeapon - 1 >= 0)
+			{
+				// and one under
+				currentWeapon--;
+			} 
+
+			else 
+			{
+				currentWeapon = numWeapons - 1;
+			}
+
+			SelectWeapon(currentWeapon);
+		}
+
+		if(currentWeapon == numWeapons + 1) 
+		{
+			currentWeapon = 0;
+		}
+
+		if(currentWeapon == -1) 
+		{
+			currentWeapon = numWeapons;
+		}
+
+		//NOTE: Script for Weapon Swap using scrollwheel was made by moinchdog on
+		// http://answers.unity3d.com/questions/64076/scroll-wheel-get-weapon.html
+		// edited by Liam Hunt and Xblivior 
+
+	}
+
+	public void SelectWeapon(int index)
+	{
+		for (int i=0; i < numWeapons; i++)    
+		{
+			if (i == index) 
+			{
+				weapons[i].gameObject.SetActive(true);
+				//weaponController.activeWeapon = weapons [i];
+			} 
+
+			else 
+			{ 
+				weapons[i].gameObject.SetActive(false);
+			}
+
+			//credit: nastasache, http://answers.unity3d.com/questions/589666/how-to-switch-weaponsc.html
+		}
 	}
 
 	public void TakeDamage(float damage)
@@ -270,6 +365,7 @@ public class PlayerBrain : MonoBehaviour
 		{
 			//player is overheated
 			isOverheated = true;
+			canShoot = false;
 		}
 	}
 }
