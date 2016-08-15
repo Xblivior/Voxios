@@ -35,7 +35,6 @@ public class PlayerBrain : MonoBehaviour
 	int currentGunNumber;
 	GameObject currentGunObj;
 
-	public WeaponController weaponController;
 	public GameObject[] weapons;
 	public int currentWeapon = 0;
 	int numWeapons; 
@@ -145,7 +144,7 @@ public class PlayerBrain : MonoBehaviour
 		}
 
 		//shooting
-		if (Input.GetMouseButton(0) && canShoot == true)
+		if (Input.GetMouseButtonDown(0) && canShoot == true)
 		{
 //			//NOTE: move to gun swap function
 //			if (equipedGun == gunLocker.assaultRifle) 
@@ -157,7 +156,7 @@ public class PlayerBrain : MonoBehaviour
 //			//instantiate the bullet as a clone so i can access its variables
 //			bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
 
-			//weaponController.Shoot ();
+			weapons [currentWeapon].GetComponent<WeaponController> ().Shoot ();
 		}
 
 		//if the player presses 1
@@ -302,13 +301,13 @@ public class PlayerBrain : MonoBehaviour
 		{
 			if (i == index) 
 			{
-				weapons[i].gameObject.SetActive(true);
-				//weaponController.activeWeapon = weapons [i];
+				weapons[i].SetActive(true);
+
 			} 
 
 			else 
 			{ 
-				weapons[i].gameObject.SetActive(false);
+				weapons[i].SetActive(false);
 			}
 
 			//credit: nastasache, http://answers.unity3d.com/questions/589666/how-to-switch-weaponsc.html
