@@ -24,11 +24,13 @@ public class WeaponController : MonoBehaviour
 
 	}
 		
-	public void Shoot()
+	public float Shoot()
 	{
 		print (damage);
 		print (heat);
 		print (fireRate);
+
+		return heat;
 	}
 		
 }

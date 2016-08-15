@@ -156,7 +156,8 @@ public class PlayerBrain : MonoBehaviour
 //			//instantiate the bullet as a clone so i can access its variables
 //			bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
 
-			weapons [currentWeapon].GetComponent<WeaponController> ().Shoot ();
+			HeatGain(weapons [currentWeapon].GetComponent<WeaponController> ().Shoot ());
+
 		}
 
 		//if the player presses 1
