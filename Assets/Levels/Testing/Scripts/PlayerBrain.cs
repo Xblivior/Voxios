@@ -12,14 +12,19 @@ public class PlayerBrain : MonoBehaviour
 	//stats
 	public float maxHP = 100f;
 	public float maxShield = 100f;
+	public float maxOvershield = 100f;
 	public float maxHeat = 100f;
 	public float heat;
 
 	public float currentHP;
 	public float currentShield;
 	public float currentHeat;
+	public float currentOvershield;
 
 	//gun references
+	public enum gunLocker {assaultRifle, submachineGun, magnum};
+	public gunLocker equipedGun;
+
 	public GameObject gunPivot;
 	public GameObject aRModel;
 
@@ -34,15 +39,11 @@ public class PlayerBrain : MonoBehaviour
 	public float strafeSpeed;
 	public float rotSpeed;
 
-	//heal drone ability veriables
+	//ability veriables
 	public GameObject healDrone;
 	public Transform droneSpawn;
 	float healTimer;
-
-	public enum gunLocker {assaultRifle, submachineGun, magnum};
-
-	public gunLocker equipedGun;
-
+	float overshieldTimer;
 
 	void Awake () 
 	{
@@ -69,14 +70,21 @@ public class PlayerBrain : MonoBehaviour
 	void Update () 
 	{
 
-		//heal drone Cooldown timer
+		//ability Cooldown timer
 		healTimer -= Time.deltaTime;
+		overshieldTimer -= Time.deltaTime;
 
 		//if timer gets below 0
 		if (healTimer <= 0f)
 		{
 			//make it 0
 			healTimer = 0f;
+		}
+			
+		if (overshieldTimer <= 0f)
+		{
+			//make it 0
+			overshieldTimer = 0f;
 		}
 
 		//if the player presses 1
@@ -90,6 +98,17 @@ public class PlayerBrain : MonoBehaviour
 			}
 		}
 
+		//if the player presses 2
+		if (Input.GetKeyDown(KeyCode.Alpha2))
+		{
+			//and the timer is 0
+			if (overshieldTimer == 0f)
+			{
+				//use overshield ability
+				Overshield();
+			}
+		}
+
 		if (Input.GetMouseButtonDown(0))
 		{
 			//NOTE: move to gun swap function
@@ -99,6 +118,7 @@ public class PlayerBrain : MonoBehaviour
 				HeatGain (heat);
 			}
 
+			//instantiate the bullet as a clone so i can access its variables
 			bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
 		}
 
@@ -116,6 +136,7 @@ public class PlayerBrain : MonoBehaviour
 	{
 		rb.MovePosition (transform.position + (transform.forward * Input.GetAxis("Vertical")  * speed * Time.deltaTime) + (transform.right * Input.GetAxis ("Horizontal")) * strafeSpeed * Time.deltaTime);
 
+		//Credit: Peter Carey
 	}
 
 	private void PlayerRotation () 
@@ -126,12 +147,15 @@ public class PlayerBrain : MonoBehaviour
 
 		transform.Rotate (Vector3.up, Input.GetAxis ("Mouse X") * rotSpeed * Time.deltaTime);
 
+		//Credit: Peter Carey
 	}
 
 	private void CameraControl ()
 	{
 		c.transform.LookAt (camAim.transform.position);
 		currentGunObj.transform.LookAt (camAim.transform.position);
+
+		//Credit: Peter Carey
 	}
 
 	void HealDrone()
@@ -145,7 +169,11 @@ public class PlayerBrain : MonoBehaviour
 
 	void Overshield()
 	{
-		
+		//add the overshield
+		currentOvershield = 100f;
+
+		//start cooldown
+		overshieldTimer = 20f;
 	}
 
 	void Overcharge()
@@ -190,3 +218,6 @@ public class PlayerBrain : MonoBehaviour
 		currentHeat += heat;
 	}
 }
+
+
+//Xblivior
