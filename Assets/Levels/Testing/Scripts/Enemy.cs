@@ -11,33 +11,55 @@ public class Enemy : MonoBehaviour
 
 	//shooting references
 	public GameObject shot;
+	public GameObject shotClone;
 	public Transform shotSpawn;
+
+	GameObject target;
 	float shotTimer;
+
+	public ParticleSystem blood;
 
 	// Use this for initialization
 	void Start () 
 	{
 		currentHP = maxHP;
 		currentShield = maxShield;
+
+		target = GameObject.FindGameObjectWithTag("Player");
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
-
+		shotTimer -= Time.deltaTime;
+		if (shotTimer <= 0f)
+		{
+			shotTimer = 0f;
+		}
 	}
 
-	public void OnTriggerEnter (Collider other)
+	public void OnTriggerStay (Collider other)
 	{
 		if (other.tag == "Player")
 		{
-			other.gameObject.SendMessage("TakeDamage", 50f);
+			gameObject.transform.LookAt(target.transform.position);
+
+			if (shotTimer <= 0f)
+			{
+				//instantiate the bullet as a clone so i can access its variables
+				shotClone = Instantiate (shot, shotSpawn.transform.position, shotSpawn.transform.rotation) as GameObject;
+				shotTimer = 2f;
+			}
+
+			//other.gameObject.SendMessage("TakeDamage", 50f);
 		}
 		print("hit");
 	}
 
 	public void TakeDamage(float damage)
 	{
+		blood.Play();
+
 		//if player has shield
 		if (currentShield > 0f)
 		{
