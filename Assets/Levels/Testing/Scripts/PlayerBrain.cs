@@ -146,18 +146,17 @@ public class PlayerBrain : MonoBehaviour
 		//shooting
 		if (Input.GetMouseButtonDown(0) && canShoot == true)
 		{
-			//NOTE: move to gun swap function
-			if (equipedGun == gunLocker.assaultRifle) 
-			{
+//			//NOTE: move to gun swap function
+//			if (equipedGun == gunLocker.assaultRifle) 
+//			{
 //				heat = 1f;
 //				HeatGain (heat);
-				HeatGain(weapons [currentWeapon].GetComponent<WeaponController> ().Shoot ());
-			}
+//			}
+//
+//			//instantiate the bullet as a clone so i can access its variables
+//			bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
 
-			//instantiate the bullet as a clone so i can access its variables
-			bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
-
-//			HeatGain(weapons [currentWeapon].GetComponent<WeaponController> ().Shoot ());
+			HeatGain(weapons [currentWeapon].GetComponent<WeaponController> ().Shoot ());
 
 		}
 
