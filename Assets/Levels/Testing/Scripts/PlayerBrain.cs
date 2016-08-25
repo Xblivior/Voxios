@@ -51,7 +51,7 @@ public class PlayerBrain : MonoBehaviour
 
 	//ability veriables
 	public GameObject healDrone;
-	public Transform droneSpawn;
+	//public Transform droneSpawn;
 	float healCooldown;
 	float overshieldCooldown;
 	float overshieldTimer = 8;
@@ -168,6 +168,7 @@ public class PlayerBrain : MonoBehaviour
 			{
 				//use heal drone ability
 				HealDrone();
+				healCooldown = 20f;
 			}
 		}
 
@@ -222,7 +223,8 @@ public class PlayerBrain : MonoBehaviour
 	void HealDrone()
 	{
 		//spawn Heal drone
-		Instantiate(healDrone, droneSpawn.transform.position, droneSpawn.transform.rotation);
+		//Instantiate(healDrone, droneSpawn.transform.position, droneSpawn.transform.rotation);
+		healDrone.SetActive (true);
 
 		//start cooldown
 		healCooldown = 10f;
