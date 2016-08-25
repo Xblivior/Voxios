@@ -203,10 +203,6 @@ public class PlayerBrain : MonoBehaviour
 
 	private void PlayerRotation () 
 	{
-		float rotationY = 0f;
-		rotationY += Input.GetAxis ("Mouse Y") * rotSpeed * Time.deltaTime;
-		rotationY = Mathf.Clamp(rotationY, -12f, 10f);
-
 		transform.Rotate (Vector3.up, Input.GetAxis ("Mouse X") * rotSpeed * Time.deltaTime);
 
 		//Credit: Peter Carey
