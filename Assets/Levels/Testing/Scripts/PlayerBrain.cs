@@ -213,7 +213,7 @@ public class PlayerBrain : MonoBehaviour
 	private void CameraControl ()
 	{
 		c.transform.LookAt (camAim.transform.position);
-		currentGunObj.transform.LookAt (camAim.transform.position);
+		gunPivot.transform.LookAt (camAim.transform.position);
 
 		//Credit: Peter Carey
 	}
