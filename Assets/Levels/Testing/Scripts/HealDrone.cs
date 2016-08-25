@@ -36,6 +36,9 @@ public class HealDrone : MonoBehaviour
 		Vector3 targetPosition = target.transform.position;
 		transform.position = Vector3.SmoothDamp (transform.position, targetPosition, ref velocity, smoothTime);
 
+		//Look at heal target
+		//transform.LookAt(Vector3.forward);
+
 		//start heal timer
 		healTime -= Time.deltaTime;
 
