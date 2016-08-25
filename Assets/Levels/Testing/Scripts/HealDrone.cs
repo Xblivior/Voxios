@@ -13,6 +13,7 @@ public class HealDrone : MonoBehaviour
 	public float smoothTime = 0.3f;
 	private Vector3 velocity = Vector3.zero;
 
+	public GameObject Player;
 
 	// Use this for initialization
 	void Start () 
@@ -48,11 +49,22 @@ public class HealDrone : MonoBehaviour
 		healBeam.SetPosition (0, transform.position);
 		//heal beam to heal target
 		healBeam.SetPosition (1, healTargetT);
+
+		Heal ();
+	}
+
+	void Heal()
+	{
+		//send message to player
+		Player.SendMessage ("HealthChanges", heal);
 	}
 
 	public void Death()
 	{
+		//deactivate drone
 		gameObject.SetActive (false);
+
+		//reset timer
 		healTime = 10f;
 	}
 }

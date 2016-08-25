@@ -347,6 +347,33 @@ public class PlayerBrain : MonoBehaviour
 			currentHP -= damage;
 		}
 
+		//stop current HP go above maxHP
+		if (currentHP >= maxHP)
+		{
+			currentHP = maxHP;
+		}
+
+		//if health is 0
+		if (currentHP <= 0f)
+		{
+			//instantiate explosions and destroy 
+			Destroy(gameObject);
+
+			//go to game over
+		}
+	}
+
+	public void HealthChanges(float hPChange)
+	{
+		//change HP
+		currentHP += hPChange;
+
+		//stop current HP go above maxHP
+		if (currentHP >= maxHP)
+		{
+			currentHP = maxHP;
+		}
+
 		//if health is 0
 		if (currentHP <= 0f)
 		{
