@@ -5,6 +5,7 @@ public class HealDrone : MonoBehaviour
 {
 	public LineRenderer healBeam;
 	public float heal = 2f;
+	float healWait;
 	float healTime = 10f;
 
 	public Transform healTarget;
@@ -38,6 +39,7 @@ public class HealDrone : MonoBehaviour
 
 		//start heal timer
 		healTime -= Time.deltaTime;
+		healWait -= Time.deltaTime;
 
 		//if heal time hit 0
 		if (healTime <= 0)
@@ -45,18 +47,29 @@ public class HealDrone : MonoBehaviour
 			Death ();
 		}
 
+		//if heal time hit 0
+		if (healWait <= 0)
+		{
+			healWait = 0;
+		}
+
 		//set the line renderer start pos 
 		healBeam.SetPosition (0, transform.position);
 		//heal beam to heal target
 		healBeam.SetPosition (1, healTargetT);
 
-		Heal ();
+		if (healWait <= 0)
+		{
+			Heal ();
+		}
+
 	}
 
 	void Heal()
 	{
 		//send message to player
 		Player.SendMessage ("HealthChanges", heal);
+		healWait = 1f;
 	}
 
 	public void Death()
