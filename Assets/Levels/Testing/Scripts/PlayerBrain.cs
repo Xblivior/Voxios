@@ -25,6 +25,8 @@ public class PlayerBrain : MonoBehaviour
 	bool isOverheated = false;
 	bool isOvershielded = false;
 
+	public ParticleSystem blood;
+
 	//gun references
 	public enum gunLocker {assaultRifle, submachineGun, magnum};
 	public gunLocker equipedGun;
@@ -315,6 +317,8 @@ public class PlayerBrain : MonoBehaviour
 
 	public void TakeDamage(float damage)
 	{
+		blood.Play();
+
 		//if player has overshield
 		if (currentOvershield > 0f)
 		{
