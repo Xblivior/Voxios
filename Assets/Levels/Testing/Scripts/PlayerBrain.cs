@@ -50,6 +50,7 @@ public class PlayerBrain : MonoBehaviour
 	public float speed;
 	public float strafeSpeed;
 	public float rotSpeed;
+	public float boost;
 
 	//ability veriables
 	public GameObject healDrone;
@@ -162,6 +163,13 @@ public class PlayerBrain : MonoBehaviour
 
 		}
 
+		//if player presses shift and they have less than 80 heat
+		if (Input.GetKeyDown(KeyCode.LeftShift) && currentHeat < 80f)
+		{
+			//Use boost
+			Boost();
+		}
+
 		//if the player presses 1
 		if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
@@ -216,6 +224,24 @@ public class PlayerBrain : MonoBehaviour
 		gunPivot.transform.LookAt (camAim.transform.position);
 
 		//Credit: Peter Carey
+	}
+
+	void Boost()
+	{
+		if (Input.GetAxis("Vertical") != 0f)
+		{
+			print ("move");
+			//rb.position = transform.position + (transform.forward * Input.GetAxis("Vertical")  * boost * Time.deltaTime);
+			transform.Translate(transform.position + (transform.forward * Input.GetAxis("Vertical")  * boost * Time.deltaTime));
+		}
+
+		else if (Input.GetAxis("Horizontal")!= 0f)
+		{
+			//rb.position = transform.position + (transform.right * Input.GetAxis("Vertical")  * boost * Time.deltaTime);
+			transform.Translate(transform.position + (transform.right * Input.GetAxis("Vertical")  * boost * Time.deltaTime));
+		}
+		//add heat 
+		currentHeat += 20f;
 	}
 
 	void HealDrone()
