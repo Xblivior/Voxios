@@ -7,7 +7,7 @@ public class MainMenuController : MonoBehaviour
 
 	public void NewGame()
 	{
-
+		SceneManager.LoadScene ("Overworld");
 	}
 
 	public void LoadGame()
@@ -27,6 +27,6 @@ public class MainMenuController : MonoBehaviour
 		
 	public void QuitGame()
 	{
-
+		Application.Quit();
 	}
 }
