@@ -341,6 +341,8 @@ public class PlayerBrain : MonoBehaviour
 		}
 	}
 
+	//NOTE: Need to improve this. Shield still goes down even if overshield is on, 
+	//      shield goes down when health also goes down
 	public void TakeDamage(float damage)
 	{
 		blood.Play();
