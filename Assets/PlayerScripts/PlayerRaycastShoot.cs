@@ -21,8 +21,8 @@ public class PlayerRaycastShoot : MonoBehaviour
 	void GunDirection()
 	{
 		Vector3 gunDirection = transform.TransformDirection(Vector3.forward);
-
-		if (Physics.Raycast(transform.position, gunDirection, out RaycastHit, 100, whatIsEverything)) //100 units forward
+		RaycastHit hit;
+		if (Physics.Raycast(transform.position, gunDirection, out hit, 100, whatIsEverything)) //100 units forward
 			print("ObjectHit");
 
 	}
