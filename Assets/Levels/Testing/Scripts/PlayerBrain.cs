@@ -226,11 +226,11 @@ public class PlayerBrain : MonoBehaviour
 		//Credit: Peter Carey
 	}
 
+	//NOTE: need to find a better way of doing this, player goes trough the floor!!
 	void Boost()
 	{
 		if (Input.GetAxis("Vertical") != 0f)
 		{
-			print ("move");
 			//rb.position = transform.position + (transform.forward * Input.GetAxis("Vertical")  * boost * Time.deltaTime);
 			transform.Translate(transform.position + (transform.forward * Input.GetAxis("Vertical")  * boost * Time.deltaTime));
 		}
