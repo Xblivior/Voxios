@@ -12,10 +12,11 @@ public class ScoutAi : MonoBehaviour
 	public ParticleSystem blood;
 
 	//Reinforcement references
-	public GameObject reinforcement;
-	int reinforcementCount;
 	public Transform spawnPoint;
 	public Transform reinforcementPoint;
+	public GameObject reinforcement;
+	int reinforcementCount;
+
 
 	// Use this for initialization
 	void Start () 

@@ -238,7 +238,7 @@ public class PlayerBrain : MonoBehaviour
 
 		else if (Input.GetAxis("Horizontal")!= 0f)
 		{
-			//rb.position = transform.position + (transform.right * Input.GetAxis("Vertical")  * boost * Time.deltaTime);
+			//rb.position = transform.position + (transform.right * Input.GetAxis("Horizontal")  * boost * Time.deltaTime);
 			transform.Translate(transform.position + (transform.right * Input.GetAxis("Horizontal")  * boost * Time.deltaTime));
 		}
 		//add heat 
