@@ -65,6 +65,7 @@ public class PlayerBrain : MonoBehaviour
 		playerBrain = this.gameObject;
 		rb = GetComponent<Rigidbody> ();
 		c = Camera.main.gameObject;
+
 	}
 
 	// Use this for initialization
@@ -232,13 +233,13 @@ public class PlayerBrain : MonoBehaviour
 		if (Input.GetAxis("Vertical") != 0f)
 		{
 			//rb.position = transform.position + (transform.forward * Input.GetAxis("Vertical")  * boost * Time.deltaTime);
-			transform.Translate(transform.position + (transform.forward * Input.GetAxis("Vertical")  * boost * Time.deltaTime));
+			transform.Translate(transform.position + (-transform.forward * Input.GetAxis("Vertical")  * boost * Time.deltaTime));
 		}
 
 		else if (Input.GetAxis("Horizontal")!= 0f)
 		{
 			//rb.position = transform.position + (transform.right * Input.GetAxis("Vertical")  * boost * Time.deltaTime);
-			transform.Translate(transform.position + (transform.right * Input.GetAxis("Vertical")  * boost * Time.deltaTime));
+			transform.Translate(transform.position + (transform.right * Input.GetAxis("Horizontal")  * boost * Time.deltaTime));
 		}
 		//add heat 
 		currentHeat += 20f;
