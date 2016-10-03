@@ -29,7 +29,7 @@ public class ScoutAi : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-	
+		
 	}
 
 	public void TakeDamage(float damage)
@@ -72,6 +72,15 @@ public class ScoutAi : MonoBehaviour
 
 			//increase reinforcement count
 			reinforcementCount ++;
+		}
+	}
+
+	public void OnTriggerEnter(Collider other)
+	{
+		if (other.tag == "ReinforcementSpot")
+		{
+			print ("Support");
+			Reinforcements ();
 		}
 	}
 }

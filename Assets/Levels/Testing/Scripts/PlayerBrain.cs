@@ -424,7 +424,13 @@ public class PlayerBrain : MonoBehaviour
 			//player is overheated
 			isOverheated = true;
 			canShoot = false;
+			Overheated ();
 		}
+	}
+
+	void Overheated()
+	{
+		
 	}
 }
 
