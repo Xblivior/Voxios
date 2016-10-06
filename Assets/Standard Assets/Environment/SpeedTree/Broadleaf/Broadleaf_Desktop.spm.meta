@@ -44,8 +44,8 @@ SpeedTreeImporter:
   animateCrossFading: 1
   billboardTransitionCrossFadeWidth: 0.25
   fadeOutWidth: 0.25
-  scaleFactor: 0.5
-  materialVersion: 1
+  scaleFactor: 0.3
+  materialVersion: 2
   userData: 
   assetBundleName: 
   assetBundleVariant: 
