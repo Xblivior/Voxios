@@ -18,7 +18,6 @@ public class ScoutAi : MonoBehaviour
 	int reinforcementCount;
 
 	bool seenPlayer = false;
-	bool retreating = false;
 
 	// Use this for initialization
 	void Start () 
@@ -36,13 +35,6 @@ public class ScoutAi : MonoBehaviour
 			Retreat ();
 		}
 
-		//NOTE: Dont want this!!
-		if (retreating == true) {
-			if (Vector3.Distance (transform.position, reinforcementPoint.position) <= 1){
-				Reinforcements ();
-				retreating = false;
-			}
-		}
 	}
 
 	void FixedUpdate()
@@ -93,18 +85,18 @@ public class ScoutAi : MonoBehaviour
 
 	void Retreat()
 	{
+		//go to the reinforcement point
 		transform.position = Vector3.Lerp(transform.position, reinforcementPoint.position, 1 * Time.deltaTime);
-		retreating = true;
+
 	}
 
 	public void Reinforcements()
 	{
-		print ("reinforced AF");
 		//have reinforcement count at 0
 		reinforcementCount = 0;
 
 		//while there is less than 2 enemies
-		while (reinforcementCount <= 2)
+		while (reinforcementCount < 2)
 		{
 			//spawn in reinforecment
 			Instantiate (reinforcement, reinforcementPoint.transform.position, reinforcementPoint.transform.rotation);
@@ -115,15 +107,16 @@ public class ScoutAi : MonoBehaviour
 
 
 	}
-
-	//NOTE: its not working for some reason. Need fix.
-	public void OnTriggerEnter(Collider other)
+		
+	void OnTriggerEnter(Collider other)
 	{
-		print ("Scout Collided");
+		//if it  hits the Reinforcement point
 		if (other.gameObject == reinforcementPoint.gameObject)
 		{
-			print ("Support");
-			spawnPoint.transform.position = other.transform.position;
+			//make the spawnpoint at the trigger
+			spawnPoint = other.transform;
+
+			//call reinforcements
 			Reinforcements ();
 		}
 	}
