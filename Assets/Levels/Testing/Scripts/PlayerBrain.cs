@@ -150,14 +150,8 @@ public class PlayerBrain : MonoBehaviour
 		//shooting
 		if (Input.GetMouseButtonDown(0) && canShoot == true)
 		{
-//			//NOTE: move to gun swap function
-//			if (equipedGun == gunLocker.assaultRifle) 
-//			{
-//				heat = 1f;
-//				HeatGain (heat);
-//			}
-//
-//			//instantiate the bullet as a clone so i can access its variables
+
+			//instantiate the bullet as a clone so i can access its variables
 			bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
 
 			HeatGain(weapons [currentWeapon].GetComponent<WeaponController> ().Shoot ());
@@ -227,19 +221,19 @@ public class PlayerBrain : MonoBehaviour
 		//Credit: Peter Carey
 	}
 
-	//NOTE: need to find a better way of doing this, player goes trough the floor!!
+
 	void Boost()
 	{
 		if (Input.GetAxis("Vertical") != 0f)
 		{
-			//rb.position = transform.position + (transform.forward * Input.GetAxis("Vertical")  * boost * Time.deltaTime);
-			transform.Translate(transform.position + (-transform.forward * Input.GetAxis("Vertical")  * boost * Time.deltaTime));
+			//teleport in forward or backwards
+			transform.Translate((Vector3.forward * Input.GetAxis("Vertical")  * boost * Time.deltaTime));
 		}
 
 		else if (Input.GetAxis("Horizontal")!= 0f)
 		{
-			//rb.position = transform.position + (transform.right * Input.GetAxis("Horizontal")  * boost * Time.deltaTime);
-			transform.Translate(transform.position + (transform.right * Input.GetAxis("Horizontal")  * boost * Time.deltaTime));
+			//teleport left or right
+			transform.Translate((Vector3.right * Input.GetAxis("Horizontal")  * boost * Time.deltaTime));
 		}
 		//add heat 
 		currentHeat += 20f;
@@ -342,38 +336,66 @@ public class PlayerBrain : MonoBehaviour
 		}
 	}
 
-	//NOTE: Need to improve this. Shield still goes down even if overshield is on, 
-	//      shield goes down when health also goes down
 	public void TakeDamage(float damage)
 	{
 		blood.Play();
 
+		//total of overshield+shield+hp - the damage
+		float total = currentHP + currentShield + currentOvershield - damage;
+
 		//if player has overshield
 		if (currentOvershield > 0f)
 		{
-			//take overshield off
-			currentOvershield -= damage;
-		}
+			//if overshield becomes less than 0
+			if (currentOvershield - (currentHP + currentShield + currentOvershield - total) < 0) 
+			{
+				//take off that amount
+				currentOvershield -= currentHP + currentShield + currentOvershield - total;
 
-		//else if there is no overshield
-		else if (currentOvershield <= 0f)
-		{
-			//take off shield
-			currentShield -= damage;
+				//and take the remainder of the damage done to overshield off of shield
+				currentShield -= Mathf.Abs (currentOvershield);
+
+				//set overshield to 0
+				currentOvershield = 0;
+			} 
+
+			else 
+			{
+				//take overshield off
+				currentOvershield -= currentHP + currentShield + currentOvershield - total;
+			}
+
 		}
 
 		//if player has shield
 		if (currentShield > 0f)
 		{
-			//take shield off
-			currentShield -= damage;
+			//if shield becomes less than 0
+			if (currentShield - (currentHP + currentShield - total) < 0) 
+			{
+				//take off that amount
+				currentShield -= currentHP + currentShield - total;
+
+				//and take the remainder of the damage done to shield off of HP
+				currentHP -= Mathf.Abs (currentShield);
+
+				//set shield to 0
+				currentShield = 0;
+			} 
+
+			else 
+			{
+				//take shield off
+				currentShield -= currentHP + currentShield - total;
+			}
+
 		}
 
 		//else if there is no shield
 		else if (currentShield <= 0f)
 		{
 			//take off health
-			currentHP -= damage;
+			currentHP -= currentHP - total;
 		}
 
 		//stop current HP go above maxHP
@@ -390,6 +412,8 @@ public class PlayerBrain : MonoBehaviour
 
 			//go to game over
 		}
+
+		//CREDIT: Jacob Kreck and Xblivior
 	}
 
 	public void HealthChanges(float hPChange)
