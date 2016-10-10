@@ -12,10 +12,10 @@ public class ScoutAi : MonoBehaviour
 	public ParticleSystem blood;
 
 	//movement references
+	NavMeshAgent navMesh;
 	public Transform[] waypoints;
-	//Transform currentWaypoint;
 	public int waypointNum = 0;
-	public float speed;
+	float speed;
 
 	//Reinforcement references
 	public Transform spawnPoint;
@@ -25,13 +25,15 @@ public class ScoutAi : MonoBehaviour
 
 	bool seenPlayer = false;
 
+
 	// Use this for initialization
 	void Start () 
 	{
 		currentHP = maxHP;
 		currentShield = maxShield;
 
-
+		navMesh = GetComponent<NavMeshAgent> ();
+		speed = navMesh.speed;
 
 	}
 
@@ -95,8 +97,11 @@ public class ScoutAi : MonoBehaviour
 
 	void Retreat()
 	{
+		//loot at reinforcement point
+		transform.LookAt (reinforcementPoint);
 		//go to the reinforcement point
-		transform.position = Vector3.Lerp(transform.position, reinforcementPoint.position, 1 * Time.deltaTime);
+		//transform.position = Vector3.Lerp(transform.position, reinforcementPoint.position, 1 * Time.deltaTime);
+		navMesh.SetDestination (reinforcementPoint.position);
 
 	}
 
@@ -120,9 +125,16 @@ public class ScoutAi : MonoBehaviour
 
 	public void NextPoint()
 	{
+		//look at target
+		transform.LookAt (waypoints [waypointNum]);
 		
-		//go to the reinforcement point
-		transform.position = Vector3.Lerp(transform.position, waypoints[waypointNum].position, 1 * Time.deltaTime);
+		if (seenPlayer == false)
+		{
+			//go to the reinforcement point
+			//transform.position = Vector3.Lerp(transform.position, waypoints[waypointNum].position, 1 * Time.deltaTime);
+			navMesh.SetDestination (waypoints [waypointNum].position);
+
+		}
 	}
 		
 	void OnTriggerEnter(Collider other)
