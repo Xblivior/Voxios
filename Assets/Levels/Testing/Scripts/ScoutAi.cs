@@ -53,7 +53,7 @@ public class ScoutAi : MonoBehaviour
 		RaycastHit hit;
 
 		//if SphereCast (AIposition, 0.5radius size, going forward, output as hit, 10 units long)
-		if (Physics.SphereCast(transform.position, 1 / 2, transform.forward, out hit, 10))
+		if (Physics.SphereCast(transform.position, 2, transform.forward, out hit, 10))
 		{
 			//if (hit tag is PLayer)
 			if (hit.transform.tag == "Player")
@@ -103,6 +103,9 @@ public class ScoutAi : MonoBehaviour
 		//transform.position = Vector3.Lerp(transform.position, reinforcementPoint.position, 1 * Time.deltaTime);
 		navMesh.SetDestination (reinforcementPoint.position);
 
+		//increase speed while retreating
+		navMesh.speed = 5;
+
 	}
 
 	public void Reinforcements()
@@ -120,7 +123,7 @@ public class ScoutAi : MonoBehaviour
 			reinforcementCount ++;
 		}
 
-
+		Destroy (gameObject);
 	}
 
 	public void NextPoint()
