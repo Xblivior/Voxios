@@ -8,7 +8,7 @@ public class SMGController : WeaponController
 	void Start () 
 	{
 		damage = 2.5f;
-		fireRate = 0.5f;
+		fireRate = 0.1f;
 		heat = 0.5f;
 	}
 	

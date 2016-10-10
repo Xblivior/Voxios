@@ -8,7 +8,7 @@ public class MagnumController : WeaponController
 	void Start () 
 	{
 		damage = 20f;
-		fireRate = 2f;
+		fireRate = 3f;
 		heat = 10f;
 	}
 	
