@@ -44,6 +44,8 @@ public class PlayerBrain : MonoBehaviour
 	public GameObject bullet, bulletClone;
 	public Transform bulletSpawn;
 
+	float fireRate;
+
 	bool canShoot = true;
 
 	//speed references
@@ -93,6 +95,12 @@ public class PlayerBrain : MonoBehaviour
 		//ability Cooldown timer
 		healCooldown -= Time.deltaTime;
 		overshieldCooldown -= Time.deltaTime;
+
+		//fire rate
+		if (fireRate > 0)
+		{
+			fireRate -= Time.deltaTime;
+		}
 
 		//if heat is >= 0
 		if (currentHeat >= 0)
@@ -148,13 +156,17 @@ public class PlayerBrain : MonoBehaviour
 		}
 
 		//shooting
-		if (Input.GetMouseButtonDown(0) && canShoot == true)
+		if (Input.GetMouseButton(0) && canShoot == true)
 		{
 
-			//instantiate the bullet as a clone so i can access its variables
-			bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
+			if (fireRate <= 0)
+			{
+				//instantiate the bullet as a clone so i can access its variables
+				bulletClone = Instantiate (bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation) as GameObject;
 
-			HeatGain(weapons [currentWeapon].GetComponent<WeaponController> ().Shoot ());
+				HeatGain(weapons [currentWeapon].GetComponent<WeaponController> ().heat);
+				fireRate = weapons [currentWeapon].GetComponent<WeaponController> ().fireRate;
+			}
 
 		}
 
