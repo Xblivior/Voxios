@@ -11,6 +11,12 @@ public class ScoutAi : MonoBehaviour
 
 	public ParticleSystem blood;
 
+	//movement references
+	public Transform[] waypoints;
+	//Transform currentWaypoint;
+	public int waypointNum = 0;
+	public float speed;
+
 	//Reinforcement references
 	public Transform spawnPoint;
 	public Transform reinforcementPoint;
@@ -24,6 +30,8 @@ public class ScoutAi : MonoBehaviour
 	{
 		currentHP = maxHP;
 		currentShield = maxShield;
+
+
 
 	}
 
@@ -54,6 +62,8 @@ public class ScoutAi : MonoBehaviour
 				seenPlayer = true;
 			}
 		}
+
+		NextPoint ();
 	}
 
 	public void TakeDamage(float damage)
@@ -107,6 +117,13 @@ public class ScoutAi : MonoBehaviour
 
 
 	}
+
+	public void NextPoint()
+	{
+		
+		//go to the reinforcement point
+		transform.position = Vector3.Lerp(transform.position, waypoints[waypointNum].position, 1 * Time.deltaTime);
+	}
 		
 	void OnTriggerEnter(Collider other)
 	{
@@ -118,6 +135,19 @@ public class ScoutAi : MonoBehaviour
 
 			//call reinforcements
 			Reinforcements ();
+		}
+
+		if (other.tag == "Waypoint")
+		{
+			if(waypointNum + 1 < waypoints.Length)
+			{
+				waypointNum++;
+			}
+
+			else if (waypointNum + 1 >= waypoints.Length)
+			{
+				waypointNum = 0;
+			}
 		}
 	}
 }
