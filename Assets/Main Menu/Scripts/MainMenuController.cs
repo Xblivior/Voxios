@@ -7,7 +7,7 @@ public class MainMenuController : MonoBehaviour
 
 	public void NewGame()
 	{
-		SceneManager.LoadScene ("Overworld");
+		SceneManager.LoadScene ("NewCity");
 	}
 
 	public void LoadGame()
