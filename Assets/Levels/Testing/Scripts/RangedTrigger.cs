@@ -11,12 +11,6 @@ public class RangedTrigger : MonoBehaviour
 		if (other.tag == "Player")
 		{
 			rangedAi.inRange = true;
-			if (rangedAi.canFire) {
-				print ("Barraging");
-				rangedAi.StartCoroutine ("Barrage");
-			} else {
-				print ("Not barraging");
-			}
 		}
 	}
 

@@ -51,16 +51,16 @@ public class RangedAi : MonoBehaviour
 	void Update () 
 	{
 		
-//		if (shotTimer <= 0f)
-//		{
-//			shotTimer = 0f;
-//		}
-//
-//		if (inRange == true)
-//		{
-//			shotTimer -= Time.deltaTime;
-//			Barrage ();
-//		}
+		if (shotTimer <= 0f)
+		{
+			shotTimer = 0f;
+		}
+
+		if (inRange == true)
+		{
+			shotTimer -= Time.deltaTime;
+			Barrage ();
+		}
 
 		if (shotWait > 0)
 		{
@@ -86,57 +86,28 @@ public class RangedAi : MonoBehaviour
 
 	}
 
-	public IEnumerator Barrage()
+	public void Barrage()
 	{
-//		gameObject.transform.LookAt(target.transform.position);
-//
-//		if (shotTimer <= 0f)
-//		{
-//			shotCount = 0;
-//			shotSpawnNum = 0;
-//
-//			while (shotCount < 4 && shotWait <= 0)
-//			{
-//				//instantiate the bullet as a clone so i can access its variables
-//				shotClone = Instantiate (shot, shotSpawn[shotSpawnNum].transform.position, shotSpawn[shotSpawnNum].transform.rotation) as GameObject;
-//
-//				shotCount++;
-//				shotSpawnNum++;
-//				shotWait = 0.2f;
-//			}
-//		}
-//
-//		//reset shot timer
-//		shotTimer = 2f;
-		shotWait = 0.5f;
-		shotTimer = 2;
-		canFire = false;
-		transform.LookAt (new Vector3 (target.transform.position.x, transform.position.y, target.transform.position.z));
+		gameObject.transform.LookAt(target.transform.position);
 
-		GameObject shota = Instantiate (shot, shotSpawn [0].transform.position, shotSpawn[0].transform.rotation) as GameObject;
+		if (shotTimer <= 0f)
+		{
+			shotCount = 0;
+			shotSpawnNum = 0;
 
-		yield return new WaitForSeconds (shotWait);
+			while (shotCount < 4 && shotWait <= 0)
+			{
+				//instantiate the bullet as a clone so i can access its variables
+				shotClone = Instantiate (shot, shotSpawn[shotSpawnNum].transform.position, shotSpawn[shotSpawnNum].transform.rotation) as GameObject;
 
-		GameObject shota2 = Instantiate (shot, shotSpawn [1].transform.position, shotSpawn[1].transform.rotation) as GameObject;
-
-		yield return new WaitForSeconds (shotWait);
-
-		GameObject shota3 = Instantiate (shot, shotSpawn [2].transform.position, shotSpawn[2].transform.rotation) as GameObject;
-
-		yield return new WaitForSeconds (shotWait);
-
-		GameObject shota4 = Instantiate (shot, shotSpawn [3].transform.position, shotSpawn[3].transform.rotation) as GameObject;
-
-		yield return new WaitForSeconds (shotWait);
-
-		canFire = true;
-
-		if (inRange) {
-			yield return new WaitForSeconds (shotTimer);
-			StartCoroutine (Barrage ());
-
+				shotCount++;
+				shotSpawnNum++;
+				shotWait = 0.2f;
+			}
 		}
-		yield break;
+
+		//reset shot timer
+		shotTimer = 2f;
 
 	}
 
