@@ -7,7 +7,6 @@ public class RangedTrigger : MonoBehaviour
 
 	void OnTriggerEnter(Collider other)
 	{
-		print ("ICU");
 		if (other.tag == "Player")
 		{
 			rangedAi.inRange = true;
@@ -16,7 +15,6 @@ public class RangedTrigger : MonoBehaviour
 
 	void OnTriggerExit(Collider other)
 	{
-		print("Run away");
 		if (other.tag == "Player")
 		{
 			rangedAi.inRange = false;
