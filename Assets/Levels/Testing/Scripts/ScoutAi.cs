@@ -25,6 +25,8 @@ public class ScoutAi : MonoBehaviour
 
 	bool seenPlayer = false;
 
+	//damage
+	public float damage = 5f;
 
 	// Use this for initialization
 	void Start () 

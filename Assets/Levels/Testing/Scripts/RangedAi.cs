@@ -88,7 +88,7 @@ public class RangedAi : MonoBehaviour
 
 	public void Barrage()
 	{
-		gameObject.transform.LookAt(target.transform.position);
+		//gameObject.transform.LookAt(target.transform.position);
 
 		if (shotTimer <= 0f)
 		{
