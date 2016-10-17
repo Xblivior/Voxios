@@ -113,7 +113,7 @@ public class RangedAi : MonoBehaviour
 
 	public void TakeDamage(float damage)
 	{
-		blood.Play();
+		//blood.Play();
 
 		//if player has shield
 		if (currentShield > 0f)
